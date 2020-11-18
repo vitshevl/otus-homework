@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otus-hw1-deployment
+  labels:
+    app: otus-hw1-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: otus-hw1-pod
+      # owner: vitshevl    
+  template:
+    metadata:
+      labels:
+        app: otus-hw1-pod
+        owner: vitshevl
+    spec:
+      containers:
+      - name: otus-hw1-container
+        image: vitshevl/otus-homework-1:1.0.1
+        ports:
+        - containerPort: 8000
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: 8000
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: 8000
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+          initialDelaySeconds: 10
+
